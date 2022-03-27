@@ -496,6 +496,7 @@ MonoBehaviour:
   weeWoo3: {fileID: 623292630}
   murmurs: {fileID: 1363319656}
   ringtone: {fileID: 2086063293}
+  gameManager: {fileID: 410669395}
   world: {fileID: 0}
   localPlayer: {fileID: 0}
   blueLight: {fileID: 0}

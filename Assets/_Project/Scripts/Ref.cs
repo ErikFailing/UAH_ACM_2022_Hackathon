@@ -39,6 +39,7 @@ public class Ref : MonoBehaviour
     public GameObject weeWoo3;
     public PlayRandomSound murmurs;
     public AudioSource ringtone;
+    public GameManager gameManager;
 
 
 

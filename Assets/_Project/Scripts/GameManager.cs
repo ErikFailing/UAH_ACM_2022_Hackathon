@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         // Spawn the world
         Ref.I.world = Instantiate(Ref.I.worldPrefab, new Vector3(), new Quaternion());
         // Spawn the local player
-        Ref.I.localPlayer = Instantiate(Ref.I.playerPrefab, new Vector3(0, 1, 0), new Quaternion(), Ref.I.world.transform);
+        Ref.I.localPlayer = Instantiate(Ref.I.playerPrefab, new Vector3(-0.8f, 1, -3), new Quaternion(), Ref.I.world.transform);
         // Get local player's lights
         for (int i = 0; i < Ref.I.localPlayer.transform.childCount; i++)
         {
@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         Ref.I.endMenu.SetActive(true);
 
         DeleteTasksInGUI();
+        DisableTaskAreas();
         
         
         gameRunning = false;
@@ -89,6 +90,7 @@ public class GameManager : MonoBehaviour
         Ref.I.gameHUD.GetComponent<AudioSource>().volume = 0.5f;
         // Toggle game running bool
         gameRunning = true;
+        EnableTaskAreas();
     }
 
     IEnumerator SlowType(string s, TMP_Text tMP_Text, float timeBetweenChars)
@@ -108,6 +110,22 @@ public class GameManager : MonoBehaviour
             if (Ref.I.tasking.transform.GetChild(i).gameObject.name.Contains("Task"))
                 Destroy(Ref.I.tasking.transform.GetChild(i).gameObject);
         }
+    }
+
+    public void EnableTaskAreas()
+    {
+        Ref.I.world.transform.GetChild(9).GetChild(0).gameObject.SetActive(true);
+        Ref.I.world.transform.GetChild(9).GetChild(1).gameObject.SetActive(true);
+        Ref.I.world.transform.GetChild(9).GetChild(2).gameObject.SetActive(true);
+        Ref.I.world.transform.GetChild(9).GetChild(3).gameObject.SetActive(true);
+    }
+
+    public void DisableTaskAreas()
+    {
+        Ref.I.world.transform.GetChild(9).GetChild(0).gameObject.SetActive(false);
+        Ref.I.world.transform.GetChild(9).GetChild(1).gameObject.SetActive(false);
+        Ref.I.world.transform.GetChild(9).GetChild(2).gameObject.SetActive(false);
+        Ref.I.world.transform.GetChild(9).GetChild(3).gameObject.SetActive(false);
     }
 
 
