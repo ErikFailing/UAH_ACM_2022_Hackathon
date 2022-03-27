@@ -1,16 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public int initialTimeRemaining;
     public int currentTimeRemaining;
+    public int score;
     public bool gameRunning;
     
     public void StartGame()
     {
+        // Reset score
+        score = 0;
         // Spawn the world
         Ref.I.world = Instantiate(Ref.I.worldPrefab, new Vector3(), new Quaternion());
         // Spawn the local player
@@ -25,6 +29,8 @@ public class GameManager : MonoBehaviour
         }
         // Make camera follow player
         Ref.I.virtualCamera1.Follow = Ref.I.localPlayer.transform;
+        // Dispatch the first task to the player!
+        StartCoroutine(DispatchTask());
         // Start timer
         currentTimeRemaining = initialTimeRemaining;
         // Toggle game running bool
@@ -44,6 +50,12 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        Ref.I.scoreEnd.text = "Score: " + score;
+        Ref.I.scoreHUD.text = "Score: " + score;
+    }
+
 
     public void EndGame()
     {
@@ -55,6 +67,24 @@ public class GameManager : MonoBehaviour
         
         gameRunning = false;
     }
+
+    IEnumerator DispatchTask()
+    {
+        Ref.I.dotDotDot.transform.parent.gameObject.SetActive(true);
+        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "";
+        yield return new WaitForSeconds(0.5f);
+        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = ".";
+        yield return new WaitForSeconds(0.5f);
+        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "..";
+        yield return new WaitForSeconds(0.5f);
+        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "...";
+        Ref.I.dotDotDot.transform.parent.gameObject.SetActive(false);
+        Ref.I.message.transform.parent.gameObject.SetActive(true);
+        Ref.I.message.transform.parent.GetComponent<PlayRandomSound>().playRandomSound();
+        yield return new WaitForSeconds(10);
+        Ref.I.message.transform.parent.gameObject.SetActive(false);
+    }
+
 
 
 }

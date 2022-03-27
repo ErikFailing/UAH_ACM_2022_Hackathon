@@ -13,6 +13,7 @@ public class InputHandler : MonoBehaviour
     public int lightSwitchDelay;
 
     private double physicsFramesSinceLastLightSwitch;
+    private bool boostEnabled;
 
     
 
@@ -57,13 +58,26 @@ public class InputHandler : MonoBehaviour
                     physicsFramesSinceLastLightSwitch = 0;
                 }
                 else physicsFramesSinceLastLightSwitch++;
+                // Turn on weewoos
+                if (!boostEnabled)
+                {
+                    int i = Random.Range(0, 3);
+                    if (i == 0) Ref.I.weeWoo1.SetActive(true);
+                    else if (i == 1) Ref.I.weeWoo2.SetActive(true);
+                    else if (i == 2) Ref.I.weeWoo3.SetActive(true);
+                    boostEnabled = true;
+                }
             }
             else
             {
                 // Turn off lights
                 Ref.I.blueLight.SetActive(false);
                 Ref.I.redLight.SetActive(false);
-
+                // Turn off weewoo
+                Ref.I.weeWoo1.SetActive(false);
+                Ref.I.weeWoo2.SetActive(false);
+                Ref.I.weeWoo3.SetActive(false);
+                boostEnabled = false;
             }
 
             
