@@ -11,9 +11,12 @@ public class InputHandler : MonoBehaviour
     public float boost;
     public float boostMultiplier;
     public int lightSwitchDelay;
+    public int flipStrength;
+    public int upStrength;
 
     private double physicsFramesSinceLastLightSwitch;
     private bool boostEnabled;
+    private bool flip;
 
     
 
@@ -27,6 +30,11 @@ public class InputHandler : MonoBehaviour
         boost = value.Get<float>();
     }
 
+    private void OnFlip(InputValue value)
+    {
+        flip = true;
+    }
+
     private void FixedUpdate()
     {
         if (Ref.I.localPlayer != null)
@@ -38,6 +46,13 @@ public class InputHandler : MonoBehaviour
             
             // Side to side turning
             Ref.I.localPlayer.GetComponent<Rigidbody>().AddTorque(Ref.I.localPlayer.transform.up * move.x * turningMultiplier);
+
+            if (flip)
+            {
+                Ref.I.localPlayer.GetComponent<Rigidbody>().AddForce(new Vector3(0, 1, 0) * upStrength, ForceMode.Impulse);
+                Ref.I.localPlayer.GetComponent<Rigidbody>().AddTorque(Ref.I.localPlayer.transform.forward * flipStrength, ForceMode.Impulse);
+                flip = false;
+            }
 
             // Turn on weewoos and lights if boosting
             if (boost > 0)

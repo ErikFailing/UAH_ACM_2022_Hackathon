@@ -10,7 +10,12 @@ public class GameManager : MonoBehaviour
     public int currentTimeRemaining;
     public int score;
     public bool gameRunning;
-    
+    public List<string> taskInfos;
+    public List<Vector3> taskLocations;
+
+
+
+
     public void StartGame()
     {
         // Reset score
@@ -30,11 +35,10 @@ public class GameManager : MonoBehaviour
         // Make camera follow player
         Ref.I.virtualCamera1.Follow = Ref.I.localPlayer.transform;
         // Dispatch the first task to the player!
-        StartCoroutine(DispatchTask());
+        StartCoroutine(DispatchTasks(taskInfos));
         // Start timer
         currentTimeRemaining = initialTimeRemaining;
-        // Toggle game running bool
-        gameRunning = true;
+        
 
     }
 
@@ -63,28 +67,48 @@ public class GameManager : MonoBehaviour
         Destroy(Ref.I.world);
         Ref.I.gameHUD.SetActive(false);
         Ref.I.endMenu.SetActive(true);
+
+        DeleteTasksInGUI();
         
         
         gameRunning = false;
     }
 
-    IEnumerator DispatchTask()
+    IEnumerator DispatchTasks(List<string> tasks)
     {
-        Ref.I.dotDotDot.transform.parent.gameObject.SetActive(true);
-        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "";
-        yield return new WaitForSeconds(0.5f);
-        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = ".";
-        yield return new WaitForSeconds(0.5f);
-        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "..";
-        yield return new WaitForSeconds(0.5f);
-        Ref.I.dotDotDot.GetComponent<TMP_Text>().text = "...";
-        Ref.I.dotDotDot.transform.parent.gameObject.SetActive(false);
-        Ref.I.message.transform.parent.gameObject.SetActive(true);
-        Ref.I.message.transform.parent.GetComponent<PlayRandomSound>().playRandomSound();
-        yield return new WaitForSeconds(10);
-        Ref.I.message.transform.parent.gameObject.SetActive(false);
+        Ref.I.gameHUD.GetComponent<AudioSource>().volume = 0f;
+        Ref.I.ringtone.Play();
+        yield return new WaitForSeconds(Ref.I.ringtone.clip.length);
+        foreach (string task in tasks)
+        {
+            GameObject taskGameObject = Instantiate(Ref.I.taskPrefab, Ref.I.tasking.transform);
+            float length = Ref.I.murmurs.playRandomSound();
+            StartCoroutine(SlowType(task, taskGameObject.transform.GetChild(1).GetComponent<TMP_Text>(), length/task.Length));
+            yield return new WaitForSeconds(length);
+        }
+        Ref.I.gameHUD.GetComponent<AudioSource>().volume = 0.5f;
+        // Toggle game running bool
+        gameRunning = true;
     }
 
+    IEnumerator SlowType(string s, TMP_Text tMP_Text, float timeBetweenChars)
+    {
+        foreach (char c in s)
+        {
+            yield return new WaitForSeconds(timeBetweenChars);
+            tMP_Text.text += c;
+        }
+    }
+
+
+    public void DeleteTasksInGUI()
+    {
+        for (int i = 0; i < Ref.I.tasking.transform.childCount; i++)
+        {
+            if (Ref.I.tasking.transform.GetChild(i).gameObject.name.Contains("Task"))
+                Destroy(Ref.I.tasking.transform.GetChild(i).gameObject);
+        }
+    }
 
 
 }

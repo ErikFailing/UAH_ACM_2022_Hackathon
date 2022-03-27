@@ -26,6 +26,7 @@ public class Ref : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject worldPrefab;
     public GameObject taskPrefab;
+    public GameObject tasking;
     public TMP_Text timerHUD;
     public TMP_Text timerEnd;
     public TMP_Text scoreHUD;
@@ -33,11 +34,11 @@ public class Ref : MonoBehaviour
     public GameObject mainMenu;
     public GameObject gameHUD;
     public GameObject endMenu;
-    public TMP_Text message;
-    public TMP_Text dotDotDot;
     public GameObject weeWoo1;
     public GameObject weeWoo2;
     public GameObject weeWoo3;
+    public PlayRandomSound murmurs;
+    public AudioSource ringtone;
 
 
 
